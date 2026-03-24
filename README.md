@@ -38,7 +38,7 @@ If used outside a Dev Container, you can install and try it like this:
 
 ```
 npm install
-npm run dev
+npm run dev:container
 ```
 
 Then you'll be able to see it running in a web browser:
