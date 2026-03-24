@@ -1,9 +1,9 @@
 (() => {
-  const SizeSelector = (props) => (
+  const SizeSelector = ({ size, sizes }) => (
     <div className="field-group">
       <label htmlFor="size-options">Size:</label>
-      <select defaultValue={props.size} name="sizeOptions" id="size-options">
-        {props.sizes.map((num) => (
+      <select defaultValue={size} name="sizeOptions" id="size-options">
+        {sizes.map((num) => (
           <option values={num} key={num}>
             {num}
           </option>
@@ -12,8 +12,8 @@
     </div>
   );
 
-  const ProductImage = (props) => (
-    <img src={`../../assets/${props.color}.jpg`} alt={`A ${props.color} sneaker`} />
+  const ProductImage = ({ color }) => (
+    <img src={`../../assets/${color}.jpg`} alt={`A ${color} sneaker`} />
   );
 
   const ProductCustomizer = () => {
