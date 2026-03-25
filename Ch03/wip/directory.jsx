@@ -31,7 +31,32 @@ function People({ people }) {
 }
 
 function Filters() {
-  return <div className="filters">stuff</div>;
+  const titles = window.LMDirectory.titles;
+
+  return (
+    <form action="" id="directory-filters">
+      <div className="group">
+        <label htmlFor="txt-name">Name:</label>
+        <input name="person_name" value="" placeholder="Name of employee" id="person-name" />
+      </div>
+      <div className="group">
+        <label htmlFor="sel-title">Job Title:</label>
+        <select name="sel-title" id="sel-title">
+          <option value="">- Select -</option>
+          {titles.map((title) => (
+            <option value={title.key} key={title.key}>
+              {title.display}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="group">
+        <label>
+          <input type="checkbox" value="1" /> Intern
+        </label>
+      </div>
+    </form>
+  );
 }
 
 function Directory() {
