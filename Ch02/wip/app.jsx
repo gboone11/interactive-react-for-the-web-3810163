@@ -25,8 +25,13 @@
 
     return (
       <div className="field-group">
-        <label htmlFor="color-options">Cize:</label>
-        <select defaultValue={color} name="colorOptions" id="color-options" onChange={onColorChange}>
+        <label htmlFor="color-options">Color:</label>
+        <select
+          defaultValue={color}
+          name="colorOptions"
+          id="color-options"
+          onChange={onColorChange}
+        >
           {colors.map((name) => (
             <option values={name} key={name}>
               {name}
@@ -44,17 +49,28 @@
   const ProductCustomizer = () => {
     const [size, setSize] = React.useState(8);
     const [sizes, setSizes] = React.useState(window.Inventory.allSizes);
+    
     const [color, setColor] = React.useState("red");
     const [colors, setColors] = React.useState(window.Inventory.allColors);
 
     const handleSizeChange = (selectedSize) => {
       const availableColors = window.Inventory.bySize[selectedSize];
       setColors(availableColors);
+      setSize(selectedSize);
+
+      if (availableColors.indexOf(color) === -1) {
+        setColor(availableColors[0]);
+      }
     };
 
     const handleColorChange = (selectedColor) => {
       const availableSizes = window.Inventory.byColor[selectedColor];
       setSizes(availableSizes);
+      setColor(selectedColor);
+
+      if (availableSizes.indexOf(size) === -1) {
+        setSize(availableSizes[0]);
+      }
     };
 
     return (
