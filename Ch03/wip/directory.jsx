@@ -1,5 +1,6 @@
 import React, { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+import { AnimatePresence, motion } from "motion/react";
 
 function Person({ person }) {
   return (
@@ -24,7 +25,16 @@ function People({ people }) {
   return (
     <div className="results">
       {people.map((person) => (
-        <Person key={person.id} person={person} />
+        <AnimatePresence mode="popLayout" key={person.id}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            exit={{ opacity: 0 }}
+          >
+            <Person person={person} />
+          </motion.div>
+        </AnimatePresence>
       ))}
     </div>
   );
@@ -34,15 +44,23 @@ function Filters({ formState, updateFormState }) {
   const titles = window.LMDirectory.titles;
 
   const updateName = (event) => {
-    updateFormState("currentName", event.target.value);
+    updateFormState({ currentName: event.target.value });
   };
 
   const updateTitle = (event) => {
-    updateFormState("currentTitle", event.target.value);
+    updateFormState({ currentTitle: event.target.value });
   };
 
   const updateIntern = (event) => {
-    updateFormState("isIntern", event.target.checked);
+    updateFormState({ isIntern: event.target.checked });
+  };
+
+  const resetFormState = () => {
+    updateFormState({
+      currentName: "",
+      currentTitle: "",
+      isIntern: false,
+    });
   };
 
   return (
@@ -80,6 +98,9 @@ function Filters({ formState, updateFormState }) {
           Intern
         </label>
       </div>
+      <div className="group">
+        <input type="reset" name="reset" value="Reset" onClick={resetFormState} />
+      </div>
     </form>
   );
 }
@@ -92,8 +113,8 @@ function Directory() {
     isIntern: false,
   });
 
-  const updateFormState = (name, val) => {
-    const newFormState = { ...formState, [name]: val };
+  const updateFormState = (spec) => {
+    const newFormState = { ...formState, ...spec };
     setFormState(newFormState);
   };
 
