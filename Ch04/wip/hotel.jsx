@@ -2,21 +2,32 @@ import React, { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import date from "date-and-time";
 
-const messageTypes = {
-  management: "Management",
-  dining: "Dining Services",
-  ops: "Operations",
-  plumbing: "Plumbing",
-  pool: "Pool",
+const CONFIG = {
+  messageTypes: {
+    management: "Management",
+    dining: "Dining Services",
+    ops: "Operations",
+    plumbing: "Plumbing",
+    pool: "Pool",
+  },
+
+  apiUrl: "/api",
 };
 
-const apiUrl = "/api";
+function Loading({what = 'messages'}) {
+	return (
+		<p>
+			Loading {what}
+			<span className="loader" style={{ marginLeft: "0.5em"}}></span>
+		</p>
+	)
+}
 
 function PostForm(props) {
-  const typeOptions = Object.keys(messageTypes).map(function (key) {
+  const typeOptions = Object.keys(CONFIG.messageTypes).map(function (key) {
     return (
       <option key={key} value={key}>
-        {messageTypes[key]}
+        {CONFIG.messageTypes[key]}
       </option>
     );
   });
@@ -59,17 +70,17 @@ function StatusMessage(props) {
 }
 
 function StatusMessageList(props) {
-  const [statuses, setStatuses] = useState(stubStatuses);
+  const [statuses, setStatuses] = useState([]);
 
   useEffect(() => {
     const abortController = new AbortController();
 
-    fetch("/api/messages", { signal: abortController.signal })
+    fetch(`${CONFIG.apiUrl}/messages?delay=5000`, { signal: abortController.signal })
       .then((response) => response.json())
       .then((data) => setStatuses(data))
       .catch((error) => {
         if (error.name !== "AbortError") {
-          console.error("Error fetching from /api/messages", error);
+          console.error("Uncaught error in fetch", error);
         }
       });
 
@@ -84,11 +95,13 @@ function StatusMessageList(props) {
     displayedStatuses = statuses.map((status) => {
       return (
         <li key={status.id} className={status.type}>
-          <StatusMessage msg={status.msg} type={messageTypes[status.type]} time={status.time} />
+          <StatusMessage msg={status.msg} type={CONFIG.messageTypes[status.type]} time={status.time} />
         </li>
       );
     });
-  }
+  } else {
+		displayedStatuses = <Loading />
+	}
 
   return <ul id="status-list">{displayedStatuses}</ul>;
 }
