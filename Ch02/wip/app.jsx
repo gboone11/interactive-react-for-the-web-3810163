@@ -18,18 +18,24 @@
     );
   };
 
-  const ColorSelector = ({ color, colors }) => (
-    <div className="field-group">
-      <label htmlFor="color-options">Cize:</label>
-      <select defaultValue={color} name="colorOptions" id="color-options">
-        {colors.map((name) => (
-          <option values={name} key={name}>
-            {name}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
+  const ColorSelector = ({ color, colors, handleColorChange }) => {
+    const onColorChange = (event) => {
+      handleColorChange(event.target.value);
+    };
+
+    return (
+      <div className="field-group">
+        <label htmlFor="color-options">Cize:</label>
+        <select defaultValue={color} name="colorOptions" id="color-options" onChange={onColorChange}>
+          {colors.map((name) => (
+            <option values={name} key={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  };
 
   const ProductImage = ({ color }) => (
     <img src={`../../assets/${color}.jpg`} alt={`A ${color} sneaker`} />
@@ -46,6 +52,11 @@
       setColors(availableColors);
     };
 
+    const handleColorChange = (selectedColor) => {
+      const availableSizes = window.Inventory.byColor[selectedColor];
+      setSizes(availableSizes);
+    };
+
     return (
       <div className="customizer">
         <div className="product-image">
@@ -53,7 +64,7 @@
         </div>
         <div className="selectors">
           <SizeSelector size={size} sizes={sizes} handleSizeChange={handleSizeChange} />
-          <ColorSelector color={color} colors={colors} />
+          <ColorSelector color={color} colors={colors} handleColorChange={handleColorChange} />
         </div>
       </div>
     );
