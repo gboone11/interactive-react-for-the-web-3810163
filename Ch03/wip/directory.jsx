@@ -1,4 +1,4 @@
-import React, { StrictMode, useState } from "react";
+import React, { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 
 function Person({ person }) {
@@ -96,6 +96,18 @@ function Directory() {
     const newFormState = { ...formState, [name]: val };
     setFormState(newFormState);
   };
+
+  useEffect(() => {
+    const filteredPeople = window.LMDirectory.people.filter(
+      (person) =>
+        (person.intern === formState.isIntern || person.intern) &&
+        (person.name.toLowerCase().indexOf(formState.currentName.toLowerCase()) !== -1 ||
+          formState.currentName === "") &&
+        (person.title_cat === formState.currentTitle || formState.currentTitle === ""),
+    );
+
+    setPeople(filteredPeople);
+  }, [formState]);
 
   return (
     <div className="company-dir">
