@@ -27,6 +27,7 @@ function People({ people }) {
       {people.map((person) => (
         <AnimatePresence mode="popLayout" key={person.id}>
           <motion.div
+						layout
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
