@@ -12,6 +12,19 @@
     </div>
   );
 
+  const ColorSelector = ({ color, colors }) => (
+    <div className="field-group">
+      <label htmlFor="color-options">Cize:</label>
+      <select defaultValue={color} name="colorOptions" id="color-options">
+        {colors.map((name) => (
+          <option values={name} key={name}>
+            {name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
   const ProductImage = ({ color }) => (
     <img src={`../../assets/${color}.jpg`} alt={`A ${color} sneaker`} />
   );
@@ -20,6 +33,7 @@
     const [size, setSize] = React.useState(8);
     const [sizes, setSizes] = React.useState(window.Inventory.allSizes);
     const [color, setColor] = React.useState("red");
+    const [colors, setColors] = React.useState(window.Inventory.allColors);
 
     return (
       <div className="customizer">
@@ -28,6 +42,7 @@
         </div>
         <div className="selectors">
           <SizeSelector size={size} sizes={sizes} />
+          <ColorSelector color={color} colors={colors} />
         </div>
       </div>
     );
