@@ -1,16 +1,22 @@
 (() => {
-  const SizeSelector = ({ size, sizes }) => (
-    <div className="field-group">
-      <label htmlFor="size-options">Size:</label>
-      <select defaultValue={size} name="sizeOptions" id="size-options">
-        {sizes.map((num) => (
-          <option values={num} key={num}>
-            {num}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
+  const SizeSelector = ({ size, sizes, handleSizeChange }) => {
+    const onSizeChange = (event) => {
+      handleSizeChange(event.target.value);
+    };
+
+    return (
+      <div className="field-group">
+        <label htmlFor="size-options">Size:</label>
+        <select defaultValue={size} name="sizeOptions" id="size-options" onChange={onSizeChange}>
+          {sizes.map((num) => (
+            <option values={num} key={num}>
+              {num}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  };
 
   const ColorSelector = ({ color, colors }) => (
     <div className="field-group">
@@ -35,13 +41,18 @@
     const [color, setColor] = React.useState("red");
     const [colors, setColors] = React.useState(window.Inventory.allColors);
 
+    const handleSizeChange = (selectedSize) => {
+      const availableColors = window.Inventory.bySize[selectedSize];
+      setColors(availableColors);
+    };
+
     return (
       <div className="customizer">
         <div className="product-image">
           <ProductImage color={color} />
         </div>
         <div className="selectors">
-          <SizeSelector size={size} sizes={sizes} />
+          <SizeSelector size={size} sizes={sizes} handleSizeChange={handleSizeChange} />
           <ColorSelector color={color} colors={colors} />
         </div>
       </div>
